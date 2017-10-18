@@ -1,13 +1,9 @@
 {
-    "name": "bahnthai",
+    "name": "luminescenceaudio",
     "version": "6.0.0",
     "description": "Cartube stereo",
     "keywords": [
-        "authentic thai",
-        "thaifood",
-        "thai",
-        "padthai",
-        "real thaifood"
+        "car tube stereo"
     ],
     "author": "Prawat Laosomboon<laosomboon@gmail.com",
     "homepage": "https://www.luminescenceaudio.com",
@@ -175,5 +171,6 @@
     "engines": {
         "node": ">= 4.2.1",
         "npm": ">= 3"
-    }
+    },
+    "licenses": ["MIT"]
 }

@@ -48,6 +48,7 @@ import { MdAutocompleteModule,
   MdTabsModule,
   MdToolbarModule,
   MdTooltipModule } from '@angular/material';
+
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 /*
@@ -66,15 +67,13 @@ import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 import { XLargeDirective } from './home/x-large';
 import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from "angularfire2/database";
+import { AngularFireAuthModule } from "angularfire2/auth";
+import { FirebaseService } from "./firebase.service";
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
 
-// Application wide providers
-const APP_PROVIDERS = [
-  APP_RESOLVER_PROVIDERS,
-  AppState
-];
 const FIREBASE_CONFIG =  {
     apiKey: "AIzaSyBr5QhQX7GTR6w6E2EotsBhch3Y5F9tHUY",
     authDomain: "thaismile-oakville.firebaseapp.com",
@@ -83,6 +82,13 @@ const FIREBASE_CONFIG =  {
     storageBucket: "thaismile-oakville.appspot.com",
     messagingSenderId: "145658044209"
 };
+
+// Application wide providers
+const APP_PROVIDERS = [
+    APP_RESOLVER_PROVIDERS,
+    AppState,
+    FirebaseService
+];
 
 type StoreType = {
   state: InternalStateType,
@@ -98,7 +104,6 @@ type StoreType = {
   declarations: [
     AppComponent,
     NavComponent,
-    AboutComponent,
     HomeComponent,
     NoContentComponent,
     XLargeDirective
@@ -143,6 +148,8 @@ type StoreType = {
     FormsModule,
     HttpModule,
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
+    AngularFireAuthModule,
+    AngularFireDatabaseModule,
     RouterModule.forRoot(ROUTES, {
       useHash: Boolean(history.pushState) === false,
       preloadingStrategy: PreloadAllModules
