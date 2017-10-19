@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="322a8371-40c1-402d-86d4-6d6191e1aae8" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/app/firebase.service.ts" afterPath="$PROJECT_DIR$/src/app/firebase.service.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/app/nav.component.ts" afterPath="$PROJECT_DIR$/src/app/nav.component.ts" />
-    </list>
+    <list default="true" id="322a8371-40c1-402d-86d4-6d6191e1aae8" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -281,12 +276,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1508261740556</updated>
-      <workItem from="1508261743413" duration="36376000" />
+      <workItem from="1508261743413" duration="36475000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36376000" />
+    <option name="totallyTimeSpent" value="36475000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
