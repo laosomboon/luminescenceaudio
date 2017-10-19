@@ -7,6 +7,7 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 import {AppState} from './app.service';
+import { Cate } from 'firebase.service';
 import {FirebaseService} from "./firebase.service";
 
 /**
@@ -39,29 +40,35 @@ import {FirebaseService} from "./firebase.service";
             </a>
         </div>
         <div id="mySidenav" class="sidenav w3-sidebar w3-bar-block w3-dark w3-card-2" style="width:200px">
-            
                 
                 <button class="w3-button w3-block w3-left-align" (click)="productOpen('mainProduct')">
-                    PRODUCTS  <i class="fa fa-caret-down"></i>
+                    PRODUCTS  <i class="fa fa-caret-down" style="font-size:10px;"></i>
                 </button>
-            <div id="mainProduct" class="w3-hide w3-dark w3-card-2">
-                <button *ngFor="let item of items">
-                    {{item.name}}
+            <div id="mainProduct" class="w3-hide w3-dark w3-card-2" *ngFor="let cate of cates">
+                <button class="w3-button w3-block w3-left-align" (click)="productOpen('modelone')" style="font-size:14px;padding-left:24px;">
+                      MODEL ONE <i class="fa fa-caret-down" style="font-size:10px;"></i>
                 </button>
-                <!--<button class="w3-button w3-block w3-left-align" (click)="productOpen('modelone')">-->
-                     <!-- - MODEL ONE  <i class="fa fa-caret-down"></i>-->
-                <!--</button>-->
-                <!--<div id="modelone" class="w3-hide w3-dark w3-card-2">-->
-                    <!--<a href="#" class="w3-bar-item sub-cate">&#45;&#45;  P1</a>-->
-                    <!--<a href="#" class="w3-bar-item sub-cate">&#45;&#45;  P2</a>-->
-                <!--</div>-->
-                <!--<button class="w3-button w3-block w3-left-align" (click)="productOpen('modeltwo')">-->
-                     <!-- - MODEL TWO  <i class="fa fa-caret-down"></i>-->
-                <!--</button>-->
-                <!--<div id="modeltwo" class="w3-hide w3-dark w3-card-2">-->
-                    <!--<a href="#" class="w3-bar-item sub-cate">&#45;&#45;  P3</a>-->
-                    <!--<a href="#" class="w3-bar-item sub-cate">&#45;&#45;  P4</a>-->
-                <!--</div>-->
+                <div id="modelone" class="w3-hide w3-dark w3-card-2">
+                    <a href="#" class="w3-bar-item sub-cate" *ngFor="let p of cates[0]['children']" style="font-size:12px;padding-left:40px;">
+                        - {{p.name}}
+                    </a>
+                </div>
+                <button class="w3-button w3-block w3-left-align" (click)="productOpen('designEngineer')" style="font-size:14px;padding-left:24px;">
+                      DESIGN AND ENGINEER <i class="fa fa-caret-down" style="font-size:10px;"></i>
+                </button>
+                <div id="designEngineer" class="w3-hide w3-dark w3-card-2">
+                    <a href="#" class="w3-bar-item sub-cate" *ngFor="let p of cates[1]['children']" style="font-size:12px;padding-left:40px;">
+                    - {{p.name}}
+                    </a>
+                </div> 
+                <button class="w3-button w3-block w3-left-align" (click)="productOpen('modeltwo')" style="font-size:14px;padding-left:24px;">
+                      MODEL TWO  <i class="fa fa-caret-down" style="font-size:10px;"></i>
+                </button>
+                <div id="modeltwo" class="w3-hide w3-dark w3-card-2">
+                    <a href="#" class="w3-bar-item sub-cate" *ngFor="let p of cates[2]['children']" style="font-size:12px;padding-left:40px;">
+                       - {{p.name}}
+                    </a>
+                </div>
             </div>
                <a href="#" class="w3-bar-item w3-button">REVIEWS</a>
                <a href="#" class="w3-bar-item w3-button">NEWS</a>
@@ -75,34 +82,20 @@ import {FirebaseService} from "./firebase.service";
 })
 export class NavComponent implements OnInit {
     // @Output() onToggleSidebarEvent = new EventEmitter<any>();
-    public catesRef: AngularFireList<any>;
-    public cates: Observable<any[]>;
+    // public catesRef: AngularFireList<any>;
+    public cates: any[];
+    // public catesOSB: Observable<any[]>;
     public isSideNavOpen = false;
     public logo = '/assets/img/logo.svg';
     // public name = 'Angular 2 Webpack Starter';
     // public url = 'https://twitter.com/AngularClass';
 
-    constructor(af: AngularFireDatabase) {
-          this.catesRef = af.list('lum');
-          // this.cates = this.catesRef.snapshotChanges().map(changes => {
-          //     return changes.map( c =>{
-          //         console.log(c.payload.key);
-          //         console.log(c.payload.val());
-          //     });
-          // });
-        this.catesRef.snapshotChanges().subscribe(actions => {
-            actions.forEach(action =>{
-                console.log(action.type);
-                console.log(action.key);
-                console.log(action.payload.val());
-            });
-        });
+    constructor(public fb: FirebaseService) {
+
     }
 
-
-
     public ngOnInit() {
-        // console.log('Initial Nav', this.appState.state);
+        this.cates = this.fb.getData();
     }
 
     public togglerClick(button){
