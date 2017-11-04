@@ -1,14 +1,14 @@
-import { AngularFireDatabase } from 'angularfire2/database';
-import { Observable } from "rxjs/Observable";
-import { AngularFireList } from "angularfire2/database";
 import {
     Component, EventEmitter,
     OnInit, Output,
     ViewEncapsulation
 } from '@angular/core';
-import {AppState} from './app.service';
-import { Cate } from 'firebase.service';
-import {FirebaseService} from "./firebase.service";
+// import {DataService, Cate, Product} from "./data.service";
+import { Nav, Cate, Product} from "./data.model";
+
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 /**
  * App Component
@@ -20,82 +20,71 @@ import {FirebaseService} from "./firebase.service";
     styles: [
        ''
     ],
-    template: `
-        <div class="codrops-top">
-            <ul>
-                <li><a href="#">PRODUCTS</a></li>
-                <li><a href="#">REVIEWS</a></li>
-                <li><a href="#">NEWS</a></li>
-                <li><a href="#">WARRANTY</a></li>
-                <li><a href="#">SERVICE</a></li>
-                <li><a href="#">PHILOSOPHY</a></li>
-                <li><a href="#">VACUUM TUBE</a></li>
-                <li><a href="#">CONTACT US</a></li>
-            </ul>
-            <a class="w3-right" id="toggler" (click)="togglerClick($event)">☰</a>
-        </div><!--/ Codrops top bar -->
+    template: `        
+        <a class="w3-right" id="toggler" (click)="togglerClick($event)">☰</a>
+        
         <div class="logo-container">
-            <a class="w3-left w3-block logo">
+            <a class="w3-left w3-block logo" [routerLink]="['/']">
                 <img id="logo" src="{{logo}}">
             </a>
         </div>
+        
+        <div class="codrops-top">
+            <ul>
+                <li><a [routerLink]="['products/cate',{id: 'c1'}]" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-PRODUCTS-</a></li>
+                <li><a [routerLink]="['pages/reviews']" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-REVIEWS-</a></li>
+                <li><a [routerLink]="['pages/news']" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-NEWS-</a></li>
+                <li><a [routerLink]="['pages/warranty']" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-WARRANTY-</a></li>
+                <li><a [routerLink]="['pages/service']" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-SERVICE-</a></li>
+                <li><a [routerLink]="['pages/philosophy']" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-PHILOSOPHY-</a></li>
+                <li><a [routerLink]="['pages/vacuumtube']" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-VACUUM TUBE-</a></li>
+                <li><a [routerLink]="['pages/contact']" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-CONTACT US-</a></li>
+            </ul>
+        </div><!--/ Codrops top bar -->
+        
+        
         <div id="mySidenav" class="sidenav w3-sidebar w3-bar-block w3-dark w3-card-2" style="width:200px">
                 
                 <button class="w3-button w3-block w3-left-align" (click)="productOpen('mainProduct')">
                     PRODUCTS  <i class="fa fa-caret-down" style="font-size:10px;"></i>
                 </button>
-            <div id="mainProduct" class="w3-hide w3-dark w3-card-2" *ngFor="let cate of cates">
-                <button class="w3-button w3-block w3-left-align" (click)="productOpen('modelone')" style="font-size:14px;padding-left:24px;">
-                      MODEL ONE <i class="fa fa-caret-down" style="font-size:10px;"></i>
-                </button>
-                <div id="modelone" class="w3-hide w3-dark w3-card-2">
-                    <a href="#" class="w3-bar-item sub-cate" *ngFor="let p of cates[0]['children']" style="font-size:12px;padding-left:40px;">
-                        - {{p.name}}
-                    </a>
-                </div>
-                <button class="w3-button w3-block w3-left-align" (click)="productOpen('designEngineer')" style="font-size:14px;padding-left:24px;">
-                      DESIGN AND ENGINEER <i class="fa fa-caret-down" style="font-size:10px;"></i>
-                </button>
-                <div id="designEngineer" class="w3-hide w3-dark w3-card-2">
-                    <a href="#" class="w3-bar-item sub-cate" *ngFor="let p of cates[1]['children']" style="font-size:12px;padding-left:40px;">
-                    - {{p.name}}
-                    </a>
-                </div> 
-                <button class="w3-button w3-block w3-left-align" (click)="productOpen('modeltwo')" style="font-size:14px;padding-left:24px;">
-                      MODEL TWO  <i class="fa fa-caret-down" style="font-size:10px;"></i>
-                </button>
-                <div id="modeltwo" class="w3-hide w3-dark w3-card-2">
-                    <a href="#" class="w3-bar-item sub-cate" *ngFor="let p of cates[2]['children']" style="font-size:12px;padding-left:40px;">
-                       - {{p.name}}
-                    </a>
+            <div id="mainProduct" class="w3-hide w3-dark w3-card-2">
+                <div *ngFor="let cate of cates | async">
+                    <button class="w3-button w3-block w3-left-align" (click)="productOpen(cate.id)" style="font-size:14px;padding-left:24px;">
+                        {{cate.name}} <i class="fa fa-caret-down" style="font-size:10px;"></i>
+                    </button>
+                    <div id="{{cate.id}}" class="w3-hide w3-dark w3-card-2">
+                        <a [routerLink]="['products/cate',{id:cate.id}]" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}" class="w3-bar-item sub-cate" style="font-size:12px;padding-left:40px;">
+                            -  {{cate.name}} HOME
+                        </a>
+                        <a *ngFor="let p of cate.products" [routerLink]="['products/detail',{cid:cate.id,pid:p.id}]" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}" class="w3-bar-item sub-cate" style="font-size:12px;padding-left:40px;">
+                            - {{p.name}}
+                        </a>
+                    </div>
                 </div>
             </div>
-               <a href="#" class="w3-bar-item w3-button">REVIEWS</a>
-               <a href="#" class="w3-bar-item w3-button">NEWS</a>
-               <a href="#" class="w3-bar-item w3-button">WARRANTY</a>
-               <a href="#" class="w3-bar-item w3-button">SERVICE</a>
-               <a href="#" class="w3-bar-item w3-button">PHILOSOPHY</a>
-               <a href="#" class="w3-bar-item w3-button">VACUUM TUBE</a>
-               <a href="#" class="w3-bar-item w3-button">CONTACT US</a>
+                <a [routerLink]="['pages/reviews']" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-REVIEWS-</a>
+                <a [routerLink]="['pages/news']" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-NEWS-</a>
+                <a [routerLink]="['pages/warranty']" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-WARRANTY-</a>
+                <a [routerLink]="['pages/service']" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-SERVICE-</a>
+                <a [routerLink]="['pages/philosophy']" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-PHILOSOPHY-</a>
+                <a [routerLink]="['pages/vacuumtube']" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-VACUUM TUBE-</a>
+                <a [routerLink]="['pages/contact']" routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-CONTACT US-</a>
         </div>
          `
 })
 export class NavComponent implements OnInit {
-    // @Output() onToggleSidebarEvent = new EventEmitter<any>();
-    // public catesRef: AngularFireList<any>;
-    public cates: any[];
-    // public catesOSB: Observable<any[]>;
     public isSideNavOpen = false;
     public logo = '/assets/img/logo.svg';
-    // public name = 'Angular 2 Webpack Starter';
-    // public url = 'https://twitter.com/AngularClass';
+    private catesCollection: AngularFirestoreCollection<Nav>;
+    private cates: Observable<Nav[]>;
 
-    constructor(public fb: FirebaseService) {
 
-    }
+    constructor(private afs: AngularFirestore,) {}
 
     public ngOnInit() {
-        this.cates = this.fb.getData();
+        this.catesCollection = this.afs.collection<Nav>('navs');
+        this.cates = this.catesCollection.valueChanges();
     }
 
     public togglerClick(button){
@@ -112,7 +101,7 @@ export class NavComponent implements OnInit {
             }else{
                 sideNav.style.left = '-200px';
                 toggler.innerText = '☰';
-                 document.body.style.backgroundColor = 'white';
+                 // document.body.style.backgroundColor = 'white';
                 this.isSideNavOpen = false;
             }
 
@@ -126,6 +115,10 @@ export class NavComponent implements OnInit {
             x.className = x.className.replace(" w3-show", "");
         }
 
+    }
+
+    ngOnDestroy(){
+        // this.fbSub.unsubscribe();
     }
 
 }

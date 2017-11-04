@@ -6,7 +6,8 @@ import {
     OnInit,
     ViewEncapsulation
 } from '@angular/core';
-import {AppState} from './app.service';
+import { DataService } from './data.service';
+import { fadeInAnimation } from './_animations/fade-in.animation';
 
 /**
  * App Component
@@ -20,10 +21,10 @@ import {AppState} from './app.service';
     ],
     template: `        
             <mainnav></mainnav>
-            <main>
+            <main id="main">
                 <router-outlet></router-outlet>
             </main>
-            <div class="w3-clear">
+            <div class="w3-clear footer">
                 <footer id="footer" class="w3-container">
                     <div class="w3-row-padding"><a (click)="login()">@</a><span> Made in Canada</span></div>
                 </footer>
@@ -32,7 +33,7 @@ import {AppState} from './app.service';
 })
 export class AppComponent implements OnInit {
 
-    constructor(public appState: AppState) {
+    constructor(data: DataService) {
     }
 
     public ngOnInit() {
@@ -40,6 +41,10 @@ export class AppComponent implements OnInit {
 
     public login(){
         console.log("go to login.");
+    }
+
+    private getState(outlet) {
+        return outlet.activatedRouteData.state;
     }
     //
     // public openSidebar($event){
@@ -92,4 +97,3 @@ export class AppComponent implements OnInit {
 //   </a>
 //   </div>
 //   </footer>
-

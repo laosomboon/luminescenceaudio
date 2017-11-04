@@ -15,39 +15,39 @@ import {
   PreloadAllModules
 } from '@angular/router';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { MdAutocompleteModule,
-  MdButtonModule,
-  MdButtonToggleModule,
-  MdCardModule,
-  MdCheckboxModule,
-  MdChipsModule,
-  MdCoreModule,
-  MdDatepickerModule,
-  MdDialogModule,
-  MdExpansionModule,
-  MdGridListModule,
-  MdIconModule,
-  MdInputModule,
-  MdListModule,
-  MdMenuModule,
-  MdNativeDateModule,
-  MdPaginatorModule,
-  MdProgressBarModule,
-  MdProgressSpinnerModule,
-  MdRadioModule,
-  MdRippleModule,
-  MdSelectModule,
-  MdSidenavModule,
-  MdSliderModule,
-  MdSlideToggleModule,
-  MdSnackBarModule,
-  MdSortModule,
-  MdTableModule,
-  MdTabsModule,
-  MdToolbarModule,
-  MdTooltipModule } from '@angular/material';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+//
+// import { MdAutocompleteModule,
+//   MdButtonModule,
+//   MdButtonToggleModule,
+//   MdCardModule,
+//   MdCheckboxModule,
+//   MdChipsModule,
+//   MdCoreModule,
+//   MdDatepickerModule,
+//   MdDialogModule,
+//   MdExpansionModule,
+//   MdGridListModule,
+//   MdIconModule,
+//   MdInputModule,
+//   MdListModule,
+//   MdMenuModule,
+//   MdNativeDateModule,
+//   MdPaginatorModule,
+//   MdProgressBarModule,
+//   MdProgressSpinnerModule,
+//   MdRadioModule,
+//   MdRippleModule,
+//   MdSelectModule,
+//   MdSidenavModule,
+//   MdSliderModule,
+//   MdSlideToggleModule,
+//   MdSnackBarModule,
+//   MdSortModule,
+//   MdTableModule,
+//   MdTabsModule,
+//   MdToolbarModule,
+//   MdTooltipModule } from '@angular/material';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -67,27 +67,26 @@ import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 import { XLargeDirective } from './home/x-large';
 import { AngularFireModule } from 'angularfire2';
-import { AngularFireDatabaseModule } from "angularfire2/database";
 import { AngularFireAuthModule } from "angularfire2/auth";
-import { FirebaseService } from "./firebase.service";
-
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { DataService } from "./data.service";
 import '../styles/styles.scss';
 import '../styles/headings.css';
 
 const FIREBASE_CONFIG =  {
-    apiKey: "AIzaSyBr5QhQX7GTR6w6E2EotsBhch3Y5F9tHUY",
-    authDomain: "thaismile-oakville.firebaseapp.com",
-    databaseURL: "https://thaismile-oakville.firebaseio.com",
-    projectId: "thaismile-oakville",
-    storageBucket: "thaismile-oakville.appspot.com",
-    messagingSenderId: "145658044209"
+    apiKey: "AIzaSyBdO0nPOLKINc_UauOVerX5SpXr_1ppQVM",
+    authDomain: "luminescenceaudio.firebaseapp.com",
+    databaseURL: "https://luminescenceaudio.firebaseio.com",
+    projectId: "luminescenceaudio",
+    storageBucket: "luminescenceaudio.appspot.com",
+    messagingSenderId: "445268357631"
 };
 
 // Application wide providers
 const APP_PROVIDERS = [
     APP_RESOLVER_PROVIDERS,
     AppState,
-    FirebaseService
+    DataService
 ];
 
 type StoreType = {
@@ -113,43 +112,43 @@ type StoreType = {
    */
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
-    MdAutocompleteModule,
-    MdButtonModule,
-    MdButtonToggleModule,
-    MdCardModule,
-    MdCheckboxModule,
-    MdChipsModule,
-    MdCoreModule,
-    MdDatepickerModule,
-    MdDialogModule,
-    MdExpansionModule,
-    MdGridListModule,
-    MdIconModule,
-    MdInputModule,
-    MdListModule,
-    MdMenuModule,
-    MdNativeDateModule,
-    MdPaginatorModule,
-    MdProgressBarModule,
-    MdProgressSpinnerModule,
-    MdRadioModule,
-    MdRippleModule,
-    MdSelectModule,
-    MdSidenavModule,
-    MdSliderModule,
-    MdSlideToggleModule,
-    MdSnackBarModule,
-    MdSortModule,
-    MdTableModule,
-    MdTabsModule,
-    MdToolbarModule,
-    MdTooltipModule,
+    // BrowserAnimationsModule,
+    // MdAutocompleteModule,
+    // MdButtonModule,
+    // MdButtonToggleModule,
+    // MdCardModule,
+    // MdCheckboxModule,
+    // MdChipsModule,
+    // MdCoreModule,
+    // MdDatepickerModule,
+    // MdDialogModule,
+    // MdExpansionModule,
+    // MdGridListModule,
+    // MdIconModule,
+    // MdInputModule,
+    // MdListModule,
+    // MdMenuModule,
+    // MdNativeDateModule,
+    // MdPaginatorModule,
+    // MdProgressBarModule,
+    // MdProgressSpinnerModule,
+    // MdRadioModule,
+    // MdRippleModule,
+    // MdSelectModule,
+    // MdSidenavModule,
+    // MdSliderModule,
+    // MdSlideToggleModule,
+    // MdSnackBarModule,
+    // MdSortModule,
+    // MdTableModule,
+    // MdTabsModule,
+    // MdToolbarModule,
+    // MdTooltipModule,
     FormsModule,
     HttpModule,
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFireAuthModule,
-    AngularFireDatabaseModule,
+    AngularFirestoreModule,
     RouterModule.forRoot(ROUTES, {
       useHash: Boolean(history.pushState) === false,
       preloadingStrategy: PreloadAllModules
@@ -167,8 +166,9 @@ export class AppModule {
 
   constructor(
     public appRef: ApplicationRef,
-    public appState: AppState
-  ) {}
+    public appState: AppState,
+  ) {
+  }
 
   public hmrOnInit(store: StoreType) {
     if (!store || !store.state) {

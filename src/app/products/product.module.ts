@@ -5,22 +5,29 @@ import { RouterModule } from '@angular/router';
 
 import { routes } from './product.routes';
 import { ProductComponent } from './product.component';
-
-console.log('`Product` bundle loaded asynchronously');
+import {CateComponent} from "./cate.component";
+import {ProductDetailComponent} from "./product-detail.component";
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule } from "angularfire2/auth";
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 
 @NgModule({
-  declarations: [
-    /**
-     * Components / Directives/ Pipes
-     */
-    ProductComponent,
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule.forChild(routes),
-  ],
+    declarations: [
+        ProductComponent,
+        CateComponent,
+        ProductDetailComponent
+    ],
+    imports: [
+        CommonModule,
+        AngularFireAuthModule,
+        AngularFireModule,
+        AngularFirestoreModule,
+        FormsModule,
+        // BrowserAnimationsModule,
+        RouterModule.forChild(routes),
+    ],
 })
 export class ProductModule {
-  public static routes = routes;
+    public static routes = routes;
 }
